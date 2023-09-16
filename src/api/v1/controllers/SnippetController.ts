@@ -4,18 +4,18 @@ import SnippetSchema from "../schema/SnippetSchema";
 export class SnippetController {
   static async save(req: Request, res: Response) {
     try {
-      const { snippetId, files } = req.body;
+      const { snippetId, filesAndFolders } = req.body;
 
-      if (!snippetId && !files) {
+      if (!snippetId && !filesAndFolders) {
         res.status(400).send({
           success: false,
-          message: "Provide atleast files array",
+          message: "Provide atleast filesAndFolders array",
         });
         return;
       }
 
       if (!snippetId) {
-        const data = await SnippetSchema.create({ files });
+        const data = await SnippetSchema.create({ filesAndFolders });
 
         res.status(200).send({
           success: true,
@@ -27,38 +27,27 @@ export class SnippetController {
       const exist = await SnippetSchema.findById({ _id: snippetId });
 
       if (exist) {
-        SnippetSchema.updateOne(
+        await SnippetSchema.updateOne(
           { _id: snippetId },
-          { files },
-          { upsert: true },
-          (error) => {
-            if (!error) {
-              res.status(200).send({
-                success: true,
-                snippetId,
-              });
-
-              return;
-            } else {
-              res.status(500).send({
-                success: false,
-                message: "Something went wrong",
-              });
-
-              return;
-            }
-          }
+          { filesAndFolders },
+          { upsert: true }
         );
+
+        res.status(200).send({
+          success: true,
+          snippetId,
+        });
+        return;
       } else {
-        const data = await SnippetSchema.create({ files });
+        const data = await SnippetSchema.create({ filesAndFolders });
         res.status(200).send({
           success: true,
           snippetId: data._id,
         });
         return;
       }
-    } catch (error) {
-      res.status(400).send({
+    } catch (error: any) {
+      res.status(500).send({
         success: false,
         message: error.message,
       });
@@ -95,7 +84,7 @@ export class SnippetController {
         });
         return;
       }
-    } catch (error) {
+    } catch (error: any) {
       res.status(400).send({
         success: false,
         message: error.message,

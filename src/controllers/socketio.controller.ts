@@ -25,8 +25,8 @@ export class SocketController {
             socket.emit(
               "response",
               JSON.stringify({
-                appDomain: "http://app.damner.dns.codedamn.afnanshaikh.com",
-                apiDomain: "http://damner.dns.codedamn.afnanshaikh.com",
+                appDomain: "https://damnbasher.afnan.dev:9080",
+                apiDomain: "https://damnbasher.afnan.dev:1337",
               })
             );
           }, 1000);
