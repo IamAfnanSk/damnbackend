@@ -1,13 +1,13 @@
-import express from "express";
-import { json, urlencoded } from "body-parser";
-import cors from "cors";
 import { config as dotenvConfig } from "dotenv";
 dotenvConfig();
+
 import http from "http";
+import express from "express";
+import cors from "cors";
+import { json, urlencoded } from "body-parser";
+import mongoose from "mongoose";
 
 import v1Router from "./api/v1/routes/routes";
-
-import mongoose from "mongoose";
 
 import { SocketController } from "./controllers/socketio.controller";
 
@@ -18,18 +18,14 @@ const app = express();
 const PORT: number = config.port;
 
 // Connect to mongo
-mongoose.connect(
-  config.mongoServer,
-  {
-    useUnifiedTopology: true,
-    useNewUrlParser: true,
-  },
-  (error) => {
-    if (!error) {
-      console.log("✨ MongoDB Connected");
-    }
+(async () => {
+  try {
+    await mongoose.connect(config.mongoServer);
+    console.log("db connected");
+  } catch (error: any) {
+    console.log(error);
   }
-);
+})();
 
 // Middlewares
 app.use(urlencoded({ extended: true }));
@@ -49,7 +45,7 @@ server.listen(PORT, () => {
 
   try {
     socketController.socketWorkIt(server);
-  } catch (error) {
+  } catch (error: any) {
     console.log("😖 Again a crash");
   }
 });
