@@ -70,12 +70,11 @@ export class SnippetController {
       const exist = await SnippetSchema.findById({ _id: snippetId });
 
       if (exist) {
-        SnippetSchema.findById({ _id: snippetId }, (error: any, data: any) => {
-          res.status(200).send({
-            success: true,
-            data,
-          });
-          return;
+        const data = await SnippetSchema.findById({ _id: snippetId });
+
+        res.status(200).send({
+          success: true,
+          data,
         });
       } else {
         res.status(400).send({
