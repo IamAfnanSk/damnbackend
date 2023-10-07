@@ -5,6 +5,8 @@
 Damnbackend is responsible for handling the initial request for component creation.
 This was left incomplete due to time limitations.
 
+This is the backend part of the project which is used by [damnground](https://github.com/IamAfnanSk/damnground) and [damnbasher](https://github.com/IamAfnanSk/damnbasher).
+
 ## Features
 
 - Initial socket connection for requesting an environment
